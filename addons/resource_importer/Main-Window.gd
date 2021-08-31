@@ -24,55 +24,55 @@ func get_all_resources_from_folder(resources_path : String) -> Array:
 		print(jEssentials.crawl_directory_for(resources_path + resource_subfolder + "/Objects", "obj"))
 		print(found_resources)
 		found_resources.append_array(jEssentials.crawl_directory_for(resources_path + resource_subfolder + "/RailTypes", "tscn"))
-		
+
 		found_resources.append_array(jEssentials.crawl_directory_for(resources_path + resource_subfolder + "/SignalTypes", "tscn"))
-		
+
 		found_resources.append_array(jEssentials.crawl_directory_for(resources_path + resource_subfolder + "/Sounds", "ogg"))
-		
+
 		found_resources.append_array(jEssentials.crawl_directory_for(resources_path + resource_subfolder + "/Textures", "png"))
-		
+
 	print("returning")
 	return found_resources
 
 
 func import_resources():
-	
+
 	$MainView/Label.text = ""
-	
+
 	jEssentials.remove_folder_recursively("res://Resources")
-	
-	print("Mami")
-	
+	jEssentials.remove_folder_recursively("res://.import")
+
 	jEssentials.copy_folder_recursively(editor_directory_path + "Resources", "res://Resources")
-	
+
 	emit_signal("resources_imported")
-	
+
 	print("Finished copying files.")
-	
+
 #	jEssentials.call_delayed(0.5, self, "export_pck")
 
 func export_pck():
 #	var found_resources = get_all_resources_from_folder("res://Resources")
 	var files_to_export = []
-	
+
 	files_to_export.append_array(jEssentials.crawl_directory_for("res://.import/", "stex"))
 	files_to_export.append_array(jEssentials.crawl_directory_for("res://.import/", "mesh"))
+	files_to_export.append_array(jEssentials.crawl_directory_for("res://.import/", "oggstr"))
 	files_to_export.append_array(jEssentials.crawl_directory_for("res://Resources/", "import"))
 	files_to_export.append_array(jEssentials.crawl_directory_for("res://Resources/", "tres"))
 	files_to_export.append_array(jEssentials.crawl_directory_for("res://Resources/", "tscn"))
-	
+
 	print(files_to_export)
-	
+
 	var pck_path = editor_directory_path + "/.cache/additional_resources.pck"
 	var packer = PCKPacker.new()
 	packer.pck_start(pck_path)
 	for file in files_to_export:
 		packer.add_file(file, file)
 	packer.flush()
-	
+
 	$MainView/Label.text = "Sucessfully exported Pck. You may restart Libre TrainSIm now."
-	
-	
+
+
 #	packer.pck_start(pck_path)
 #
 #	if resource_path.get_extension() == "obj":
@@ -85,10 +85,10 @@ func export_pck():
 #		if resource == resource_path: continue
 #		packer.add_file("res://Resources/" + resource, "res://Resources/" + resource)
 #	packer.flush()
-	
-	
-	
-	
+
+
+
+
 #
 #func get_all_loaded_additional_resources() -> Array:
 #	var found_resources = []
